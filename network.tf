@@ -14,6 +14,7 @@ resource "aws_internet_gateway" "igw" {
   tags = {
     Name = "nextcloud-igw"
   }
+  vpc_id = aws_vpc.nextcloud_vpc.id
 }
 
 module "subnet-us-east-1" {

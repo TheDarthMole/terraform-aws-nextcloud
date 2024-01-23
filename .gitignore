@@ -2,3 +2,5 @@
 .idea
 .terraform.lock.hcl
 *.iml
+*.tfstate
+*.tfstate.backup
