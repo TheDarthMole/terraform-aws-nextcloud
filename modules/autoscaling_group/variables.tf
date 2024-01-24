@@ -27,3 +27,8 @@ variable "vpc_id" {
   description = "The ID of the VPC in which to place the server."
   type        = string
 }
+
+variable "efs_id" {
+    description = "The id of the EFS volume to mount on the servers."
+    type        = string
+}

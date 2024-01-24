@@ -8,6 +8,7 @@ module "asg" {
   lb_id         = aws_lb.test.id
   sg_id         = aws_security_group.lb_sg.id
   vpc_id        = aws_vpc.nextcloud_vpc.id
+  efs_id = aws_efs_file_system.nextcloud_efs.id
 }
 
 resource "aws_lb" "test" {

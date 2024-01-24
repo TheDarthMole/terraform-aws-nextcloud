@@ -1,7 +1,27 @@
-resource "aws_launch_configuration" "as_conf" {
-  name          = "web_config"
+resource "aws_launch_template" "as_conf" {
+  name_prefix   = "web_config"
   image_id      = var.image_id
   instance_type = var.instance_type
+
+  user_data = base64encode(<<-EOF
+sudo yum update
+sudo yum install docker amazon-efs-utils -y
+sudo systemctl enable docker
+sudo systemctl start docker
+
+sudo mkdir -p /mnt/efs/fs1
+sudo mount -t efs -o tls ${var.efs_id}:/ /mnt/efs/fs1
+
+sudo docker run -d \
+-v /mnt/efs/fs1/:/var/www/html \
+-p 80:80 \
+-e 'REDIS_HOST=' \
+-e 'REDIS_HOST_PORT=6379' \
+-e 'NEXTCLOUD_TRUSTED_DOMAINS=*' \
+--name nextcloud \
+nextcloud:28.0.1-apache
+              EOF
+    )
 }
 
 resource "aws_placement_group" "web" {
@@ -25,9 +45,13 @@ resource "aws_autoscaling_group" "nextcloud" {
   desired_capacity          = 4
   force_delete              = true
   placement_group           = aws_placement_group.web.id
-  launch_configuration      = aws_launch_configuration.as_conf.name
   vpc_zone_identifier       = var.subnet_ids
   target_group_arns         = [aws_lb_target_group.test.arn]
+
+  launch_template {
+    id      = aws_launch_template.as_conf.id
+    version = "$Latest"
+  }
 
   instance_maintenance_policy {
     min_healthy_percentage = 90
