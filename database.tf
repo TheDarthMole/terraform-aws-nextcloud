@@ -1,0 +1,20 @@
+resource "aws_db_subnet_group" "default" {
+  name       = "main"
+  subnet_ids = module.subnet-us-east-1.private_subnet_ids
+
+  tags = {
+    Name = "My DB subnet group"
+  }
+}
+
+resource "aws_db_instance" "default" {
+  allocated_storage    = 10
+  db_name              = "mydb"
+  engine               = "postgres"
+  instance_class       = "db.t3.micro"
+  username             = "nextcloud"
+  password             = "foobarbaz"
+  skip_final_snapshot  = true
+  multi_az             = true
+  db_subnet_group_name = aws_db_subnet_group.default.name
+}
