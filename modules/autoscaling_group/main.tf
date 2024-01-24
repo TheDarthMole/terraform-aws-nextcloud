@@ -2,6 +2,7 @@ resource "aws_launch_template" "as_conf" {
   name_prefix   = "web_config"
   image_id      = var.image_id
   instance_type = var.instance_type
+  security_group_names = [aws_security_group.web_sg.id]
 
   user_data = base64encode(<<-EOF
 sudo yum update
@@ -24,6 +25,26 @@ nextcloud:28.0.1-apache
     )
 }
 
+resource "aws_security_group" "web_sg" {
+  vpc_id = var.vpc_id
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  ingress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+}
+
 resource "aws_placement_group" "web" {
   name     = "hunky-dory-pg"
   strategy = "spread"
@@ -37,9 +58,9 @@ resource "aws_lb_target_group" "test" {
 }
 
 resource "aws_autoscaling_group" "nextcloud" {
-  name                      = "foobar3-terraform-test"
+  name                      = "nextcloud-web-asg"
   max_size                  = 5
-  min_size                  = 1
+  min_size                  = 2
   health_check_grace_period = 300
   health_check_type         = "ELB"
   desired_capacity          = 4
@@ -54,7 +75,7 @@ resource "aws_autoscaling_group" "nextcloud" {
   }
 
   instance_maintenance_policy {
-    min_healthy_percentage = 90
+    min_healthy_percentage = 30
     max_healthy_percentage = 120
   }
 
