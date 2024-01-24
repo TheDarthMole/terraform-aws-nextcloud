@@ -2,9 +2,10 @@ resource "aws_launch_template" "as_conf" {
   name_prefix   = "web_config"
   image_id      = var.image_id
   instance_type = var.instance_type
-  security_group_names = [aws_security_group.web_sg.id]
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
 
   user_data = base64encode(<<-EOF
+#!/bin/bash
 sudo yum update
 sudo yum install docker amazon-efs-utils -y
 sudo systemctl enable docker
