@@ -19,7 +19,7 @@ resource "aws_lb" "test" {
   security_groups    = [aws_security_group.allow_all.id]
   subnets            = module.subnet-us-east-1.public_subnet_ids
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 }
 
 resource "aws_security_group" "allow_all" {
