@@ -8,7 +8,8 @@ module "asg" {
   lb_arn         = aws_lb.test.arn
   sg_id         = aws_security_group.allow_all.id
   vpc_id        = aws_vpc.nextcloud_vpc.id
-  efs_id = aws_efs_file_system.nextcloud_efs.id
+  efs_id        = aws_efs_file_system.nextcloud_efs.id
+  depends_on    = [aws_efs_mount_target.alpha]
 }
 
 resource "aws_lb" "test" {
