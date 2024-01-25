@@ -13,8 +13,8 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
-variable "lb_id" {
-  description = "The ID of the load balancer to which to attach the server."
+variable "lb_arn" {
+  description = "The ARN of the load balancer to which to attach the server."
   type        = string
 }
 

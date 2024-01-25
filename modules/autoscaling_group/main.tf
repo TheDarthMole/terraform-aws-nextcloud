@@ -17,8 +17,6 @@ sudo mount -t efs -o tls ${var.efs_id}:/ /mnt/efs/fs1
 sudo docker run -d \
 -v /mnt/efs/fs1/:/var/www/html \
 -p 80:80 \
--e 'REDIS_HOST=' \
--e 'REDIS_HOST_PORT=6379' \
 -e 'NEXTCLOUD_TRUSTED_DOMAINS=*' \
 --name nextcloud \
 nextcloud:28.0.1-apache
@@ -56,6 +54,17 @@ resource "aws_lb_target_group" "test" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
+}
+
+resource "aws_lb_listener" "nextcloud_front_end" {
+  load_balancer_arn = var.lb_arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.test.arn
+  }
 }
 
 resource "aws_autoscaling_group" "nextcloud" {
