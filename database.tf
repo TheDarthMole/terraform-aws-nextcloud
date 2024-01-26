@@ -8,15 +8,15 @@ resource "aws_db_subnet_group" "default" {
 }
 
 resource "aws_db_instance" "default" {
-  allocated_storage    = 10
-  db_name              = "mydb"
-  engine               = "postgres"
-  instance_class       = "db.t3.micro"
-  username             = "nextcloud"
-  password             = "foobarbaz"
-  skip_final_snapshot  = true
-  multi_az             = true
-  db_subnet_group_name = aws_db_subnet_group.default.name
+  allocated_storage      = 10
+  db_name                = "mydb"
+  engine                 = "postgres"
+  instance_class         = "db.t3.micro"
+  username               = "nextcloud"
+  password               = "foobarbaz"
+  skip_final_snapshot    = true
+  multi_az               = true
+  db_subnet_group_name   = aws_db_subnet_group.default.name
   vpc_security_group_ids = [aws_security_group.allow_all.id]
 }
 

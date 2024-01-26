@@ -1,8 +1,13 @@
 resource "aws_launch_template" "as_conf" {
-  name_prefix   = "web_config"
-  image_id      = var.image_id
-  instance_type = var.instance_type
+  name_prefix            = "web_config"
+  image_id               = var.image_id
+  instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.web_sg.id]
+
+  iam_instance_profile {
+    name = var.instance_profile_name
+  }
+
 
   user_data = base64encode(<<-EOF
 #!/bin/bash
@@ -17,11 +22,13 @@ sudo mount -t efs -o tls ${var.efs_id}:/ /mnt/efs/fs1
 sudo docker run -d \
 -v /mnt/efs/fs1/:/var/www/html \
 -p 80:80 \
+-e 'OBJECTSTORE_S3_BUCKET=${var.s3_bucket_name}' \
+-e 'OBJECTSTORE_S3_REGION=${var.s3_bucket_region}' \
 -e 'NEXTCLOUD_TRUSTED_DOMAINS=*' \
 --name nextcloud \
 nextcloud:28.0.1-apache
               EOF
-    )
+  )
 }
 
 resource "aws_security_group" "web_sg" {

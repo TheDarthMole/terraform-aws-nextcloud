@@ -29,6 +29,21 @@ variable "vpc_id" {
 }
 
 variable "efs_id" {
-    description = "The id of the EFS volume to mount on the servers."
+  description = "The id of the EFS volume to mount on the servers."
+  type        = string
+}
+
+variable "instance_profile_name" {
+  description = "The name of the instance profile to attach to the server."
+  type        = string
+}
+
+variable "s3_bucket_name" {
+    description = "The name of the S3 bucket to which to attach the nextcloud server."
+    type        = string
+}
+
+variable "s3_bucket_region" {
+    description = "The region of the S3 bucket to which to attach the nextcloud server."
     type        = string
 }
