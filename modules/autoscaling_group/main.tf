@@ -24,6 +24,14 @@ sudo docker run -d \
 -p 80:80 \
 -e 'OBJECTSTORE_S3_BUCKET=${var.s3_bucket_name}' \
 -e 'OBJECTSTORE_S3_REGION=${var.s3_bucket_region}' \
+-e 'REDIS_HOST=${var.redis_host}' \
+-e 'REDIS_HOST_PORT=${var.redis_port}' \
+-e 'POSTGRES_DB=${var.postgres_db}' \
+-e 'POSTGRES_USER=${var.postgres_user}' \
+-e 'POSTGRES_PASSWORD=${var.postgres_password}' \
+-e 'POSTGRES_HOST=${var.postgres_host}' \
+-e 'NEXTCLOUD_ADMIN_USER=${var.nextcloud_admin_user}' \
+-e 'NEXTCLOUD_ADMIN_PASSWORD=${var.nextcloud_admin_password}' \
 -e 'NEXTCLOUD_TRUSTED_DOMAINS=*' \
 --name nextcloud \
 nextcloud:28.0.1-apache

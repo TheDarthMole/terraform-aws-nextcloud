@@ -39,11 +39,52 @@ variable "instance_profile_name" {
 }
 
 variable "s3_bucket_name" {
-    description = "The name of the S3 bucket to which to attach the nextcloud server."
-    type        = string
+  description = "The name of the S3 bucket to which to attach the nextcloud server."
+  type        = string
 }
 
 variable "s3_bucket_region" {
-    description = "The region of the S3 bucket to which to attach the nextcloud server."
-    type        = string
+  description = "The region of the S3 bucket to which to attach the nextcloud server."
+  type        = string
+}
+
+variable "redis_host" {
+  description = "The hostname of the Redis server to use for caching."
+  type        = string
+}
+
+variable "redis_port" {
+  description = "The port of the Redis server to use for caching."
+  type        = number
+  default     = 6379
+}
+
+variable "postgres_db" {
+  description = "The name of the PostgreSQL database to use for the server."
+  type        = string
+}
+
+variable "postgres_user" {
+  description = "The username of the PostgreSQL user to use for the server."
+  type        = string
+}
+
+variable "postgres_password" {
+  description = "The password of the PostgreSQL user to use for the server."
+  type        = string
+}
+
+variable "postgres_host" {
+  description = "The hostname of the PostgreSQL server to use for the server."
+  type        = string
+}
+
+variable "nextcloud_admin_user" {
+  description = "The username of the Nextcloud admin user."
+  type        = string
+}
+
+variable "nextcloud_admin_password" {
+  description = "The password of the Nextcloud admin user."
+  type        = string
 }

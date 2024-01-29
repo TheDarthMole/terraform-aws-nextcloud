@@ -14,6 +14,17 @@ module "asg" {
 
   s3_bucket_name   = aws_s3_bucket.nextcloud_s3.bucket
   s3_bucket_region = aws_s3_bucket.nextcloud_s3.region
+
+  redis_host = aws_elasticache_replication_group.nextcloud_redis.configuration_endpoint_address
+
+
+  postgres_db       = aws_db_instance.default.db_name
+  postgres_user     = aws_db_instance.default.username
+  postgres_password = "foobarbaz"
+  postgres_host     = aws_db_instance.default.address
+
+  nextcloud_admin_user     = "hello"
+  nextcloud_admin_password = "hello"
 }
 
 resource "aws_lb" "test" {
